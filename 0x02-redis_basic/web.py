@@ -32,4 +32,5 @@ def cacher(method):
 def get_page(url: str) -> str:
     """ Returns HTML content of a url """
     res = requests.get(url)
+    res.raise_for_status()
     return res.text
