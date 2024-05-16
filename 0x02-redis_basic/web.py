@@ -15,17 +15,16 @@ def cacher(method):
     @wraps(method)
     def wrapper(url):
         cached_key = "cached:" + url
+        count_key = "count:" + url
+        store.incr(count_key)
         cached_data = store.get(cached_key)
         if cached_data:
             return cached_data.decode("utf-8")
 
-        count_key = "count:" + url
-        html = method(url)
+        content = method(url)
 
-        store.incr(count_key)
-        store.set(cached_key, html)
-        store.expire(cached_key, 10)
-        return html
+        store.setex(cached_key, 10, content)
+        return content
     return wrapper
 
 
