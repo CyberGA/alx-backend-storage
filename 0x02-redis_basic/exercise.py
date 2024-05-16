@@ -12,7 +12,7 @@ class Cache:
         store a redis client instance and
         flush the instance """
         self._redis = redis.Redis(host='localhost', port=6379, db=0)
-        self_redis.flushdb()
+        self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """takes a data arg and
