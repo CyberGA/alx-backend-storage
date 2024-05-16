@@ -4,12 +4,13 @@ web cache and tracker
 """
 import requests
 import redis
+from typing import Callable
 from functools import wraps
 
 store = redis.Redis()
 
 
-def count_url_access(method):
+def count_url_access(method: Callable) -> Callables:
     """ Decorator counting how many times
     a URL is accessed """
     @wraps(method)
@@ -25,6 +26,7 @@ def count_url_access(method):
             return cached_data.decode("utf-8")
 
         data = method(url)
+        store.set(count_key, 0)
         store.setex(cached_key, 10, data)
         return data
     return wrapper
